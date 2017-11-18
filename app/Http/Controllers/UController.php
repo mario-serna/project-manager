@@ -6,8 +6,19 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
-class UsersController extends Controller
-{   
+// UsersController
+class UController extends Controller
+{
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
     function getAll(Request $request)
     {
         if ($request->isJson()) {
@@ -37,7 +48,10 @@ class UsersController extends Controller
     {
         if ($request->isJson()) {
             if ($term !== '') {
-                $users = User::select('username, email')->where('username', 'like', "$term%")->limit($limit)->get();
+                $users = User::select('id', 'username', 'email')
+                ->where('username', 'like', "$term%")
+                ->orWhere('email', 'like', "$term%")
+                ->limit($limit)->get();
                 return response()->json($users, 200);
             }
         }
@@ -136,4 +150,6 @@ class UsersController extends Controller
 
         return response()->json(['error' => 'Unauthorized'], 401, []);
     }
+
+    //
 }

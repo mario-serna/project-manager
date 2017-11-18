@@ -12,19 +12,30 @@
 */
 
 $router->group(['middleware' => []], function () use ($router) {
-    $router->post('/users/login', ['uses' => 'UsersController@getToken']);
+    $router->post('/users/login', ['uses' => 'UController@getToken']);
 });
 
 $router->group(['middleware' => ['auth']], function () use ($router) {
 
     //Users
-    $router->get('/users', ['uses' => 'UsersController@getAll']);
-    $router->get('/users/{id}', ['uses' => 'UsersController@getUser']);
+    $router->get('/users', ['uses' => 'UController@getAll']);
+    $router->get('/users/{id}', ['uses' => 'UController@getUser']);
+    $router->get('/users/search/{term}[/limit/{limit}]', ['uses' => 'UController@getUsersByTerm']);
     
-    $router->post('/users', ['uses' => 'UsersController@createUser']);
+    $router->post('/users', ['uses' => 'UController@createUser']);
 
-    $router->put('/users/{id}', ['uses' => 'UsersController@updateUser']);
-    $router->delete('/users/{id}', ['uses' => 'UsersController@deleteUser']);
+    $router->put('/users/{id}', ['uses' => 'UController@updateUser']);
+    $router->delete('/users/{id}', ['uses' => 'UController@deleteUser']);
+
+    //Tutors
+    $router->get('/tutors', ['uses' => 'TutorsController@getAll']);
+    $router->get('/tutors/{id}', ['uses' => 'TutorsController@getTutor']);
+    $router->get('/tutors/search/{term}[/limit/{limit}]', ['uses' => 'TutorsController@getTutorsByTerm']);
+    
+    $router->post('/tutors', ['uses' => 'TutorsController@createTutor']);
+
+    $router->put('/tutors/{id}', ['uses' => 'TutorsController@updateTutor']);
+    $router->delete('/tutors/{id}', ['uses' => 'TutorsController@deleteTutor']);
 });
 
 $router->get('/', function () use ($router) {

@@ -31,11 +31,34 @@ $router->group(['middleware' => ['auth']], function () use ($router) {
     $router->get('/tutors', ['uses' => 'TutorsController@getAll']);
     $router->get('/tutors/{id}', ['uses' => 'TutorsController@getTutor']);
     $router->get('/tutors/search/{term}[/limit/{limit}]', ['uses' => 'TutorsController@getTutorsByTerm']);
+    $router->get('/tutors/searchBy/{key}/{value}', ['uses' => 'TutorsController@getTutorBy']);
     
     $router->post('/tutors', ['uses' => 'TutorsController@createTutor']);
 
     $router->put('/tutors/{id}', ['uses' => 'TutorsController@updateTutor']);
     $router->delete('/tutors/{id}', ['uses' => 'TutorsController@deleteTutor']);
+
+    // Sections
+    $router->get('/sections', ['uses' => 'SectionsController@getAll']);
+    $router->get('/sections/{id}', ['uses' => 'SectionsController@getSection']);
+    $router->get('/sections/search/{term}[/limit/{limit}]', ['uses' => 'SectionsController@getSectionByTerm']);
+    $router->get('/sections/searchBy/{key}/{value}', ['uses' => 'SectionsController@getSectionBy']);
+    
+    $router->post('/sections', ['uses' => 'SectionsController@createSection']);
+
+    $router->put('/sections/{id}', ['uses' => 'SectionsController@updateSection']);
+    $router->delete('/sections/{id}', ['uses' => 'SectionsController@deleteSection']);
+
+    // Students
+    $router->get('/students', ['uses' => 'StudentsController@getAll']);
+    $router->get('/students/{id}', ['uses' => 'StudentsController@getStudent']);
+    $router->get('/students/search/{term}[/limit/{limit}]', ['uses' => 'StudentsController@getStudentByTerm']);
+    $router->get('/students/searchBy/{key}/{value}', ['uses' => 'StudentsController@getStudentBy']);
+    
+    $router->post('/students', ['uses' => 'StudentsController@createStudent']);
+
+    $router->put('/students/{id}', ['uses' => 'StudentsController@updateStudent']);
+    $router->delete('/students/{id}', ['uses' => 'StudentsController@deleteStudent']);
 });
 
 $router->get('/', function () use ($router) {

@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
             $table->collation = 'utf8_bin';
 
             $table->increments('id');
-            $table->string('name');
+            $table->string('fullname');
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('password');

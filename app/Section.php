@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class Tutor extends Model implements AuthenticatableContract, AuthorizableContract
+class Section extends Model implements AuthenticatableContract, AuthorizableContract
 {
     use Authenticatable, Authorizable;
 
@@ -18,7 +18,7 @@ class Tutor extends Model implements AuthenticatableContract, AuthorizableContra
      * @var array
      */
     protected $fillable = [
-       'worker_number' ,'name', 'lastname', 'm_lastname', 'email', 'alt_email', 'user_id'
+       'number', 'key' ,'carrer', 'generation', 'program', 'level', 'campus', 'tutor_id'
     ];
 
     /**
@@ -30,8 +30,8 @@ class Tutor extends Model implements AuthenticatableContract, AuthorizableContra
         'password',
     ];
 
-    public function user()
+    public function tutor()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\Tutor');
     }
 }

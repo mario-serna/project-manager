@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 // UsersController
 class UController extends Controller
@@ -22,7 +23,7 @@ class UController extends Controller
     function getAll(Request $request)
     {
         if ($request->isJson()) {
-            $users = User::all();
+            $users = User::get();
             return response()->json($users, 200);
         }
 
@@ -48,7 +49,7 @@ class UController extends Controller
     {
         if ($request->isJson()) {
             if ($term !== '') {
-                $users = User::select('id', 'username', 'email')
+                $users = User::select('id', 'fullname', 'username', 'email')
                 ->where('username', 'like', "$term%")
                 ->orWhere('email', 'like', "$term%")
                 ->limit($limit)->get();
@@ -74,7 +75,7 @@ class UController extends Controller
             }
 
             $user = User::create([
-                'name' => $data['name'],
+                'fullname' => $data['fullname'],
                 'username' => $data['username'],
                 'email' => $data['email'],
                 'password' => Hash::make($data['password']),
@@ -94,7 +95,7 @@ class UController extends Controller
 
                 $data = $request->json()->all();
                 
-                $user->name = $data['name'];
+                $user->fullname = $data['fullname'];
                 $user->username = $data['username'];
                 $user->email = $data['email'];
                 $user->level = $data['level'];
@@ -139,17 +140,21 @@ class UController extends Controller
                 $user = User::where('username', $data['username'])->first();
 
                 if ($user && Hash::check($data['password'], $user->password)) {
-                    return response()->json($user, 200);
+                    if($user->access === 1) {
+                        return response()->json($user, 200);
+                    }
+                    else{
+                        return response()->json(['error' => 'Access not allowed for this account', 'code' => '2'], 401);
+                    }
                 } else {
-                    return response()->json(['error' => 'No content'], 406);
+                    return response()->json(['error' => 'User or password incorrect', 'code' => '1'], 401);
                 }
             } catch (ModelNotFoundException $e) {
-                return response()->json(['error' => 'No content'], 406);
+                return response()->json(['error' => 'User or password incorrect', 'code' => '1'], 401);
             }
         }
 
-        return response()->json(['error' => 'Unauthorized'], 401, []);
+        return response()->json(['error' => 'Unauthorized', 'code' => '0'], 401, []);
     }
 
-    //
 }
